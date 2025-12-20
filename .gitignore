@@ -1,0 +1,16 @@
+
+*.csv
+*.parquet
+*.pkl
+*.xlsx
+*.json
+*.feather
+*.h5
+
+
+.ipynb_checkpoints/
+__pycache__/
+.cache/
+*.pyc
+
+.env
