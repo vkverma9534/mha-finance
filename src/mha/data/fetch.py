@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 
 
 
-def fetch_minute_ohlcv(
+def fetch_minute_ohlcv(   #-> For estimating intraDay scenarios
     symbol: str,
     start: str,
     end: str | None = None,
@@ -59,7 +59,7 @@ def fetch_minute_ohlcv(
 # )
 
 
-def fetch_2minute_ohlcv(
+def fetch_2minute_ohlcv(      #-> For estimating 1 week scenarios
     symbol: str,
     start: str,
     end: str | None = None,
@@ -110,7 +110,7 @@ def fetch_2minute_ohlcv(
 #     interval="2m"
 # )
 
-def fetch_hourly_ohlcv(
+def fetch_hourly_ohlcv(   #-> For estimating 1 month scenarios
     symbol: str,
     start: str,
     end: str | None = None,
@@ -161,7 +161,7 @@ def fetch_hourly_ohlcv(
 #     interval="1h"
 # )
 
-def fetch_daily_ohlcv(
+def fetch_daily_ohlcv(    #-> For estimating 1 year scenarios
     symbol: str,
     start: str,
     end: str | None = None,
