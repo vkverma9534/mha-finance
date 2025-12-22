@@ -39,7 +39,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   - Price prediction
   - Trading strategies
 
-  **3 Horizon based data span selection** 
+ **3 Horizon based data span selection** 
 
   - *Intra-Day estimation*:-
   A 5 Minute interval data of 50 Days
@@ -53,7 +53,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   - *Annual estimation*:-
   A daily interval data of 15 years
 
-  **4 Steps for achieving this objective**
+ **4 Steps for achieving this objective**
 
 * Step 1-- Data Ingestion
    
@@ -90,7 +90,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   
    - Each rolling window defines the data used for statistical estimation.
 
- * Step 4-- Statistical estimation
+* Step 4-- Statistical estimation
     
     Within Rolling Window
   
@@ -104,7 +104,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         Represents the empirical dispersion of monthly returns 
         (not volatility modeling)
 
-  **5 Output Structure**
+ **5 Output Structure**
       *Final output format for 1 month as example horizon*
   
     ReturnSummary(
@@ -119,7 +119,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         }
     )
 
-**6 Concepts Involved**
+ **6 Concepts Involved**
       *Final output format for 1 month as example horizon*
   Concepts Of Finance
         
@@ -138,9 +138,3 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         Effective sample size
         
   *Machine learning is intentionally not used to avoid unjustified prediction*
-        
-
-           
-
-    
-  
