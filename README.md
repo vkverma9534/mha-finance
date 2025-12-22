@@ -106,7 +106,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
 
  **5 Output Structure**
 
-      *Final output format for 1 month as example horizon*
+  *Final output format for 1 month as example horizon*
   
     ReturnSummary(
         mean,                 # Estimated mean monthly return
