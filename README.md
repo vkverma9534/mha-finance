@@ -90,15 +90,19 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   
    - Each rolling window defines the data used for statistical estimation.
 
-  Step 4-- Statistical estimation
-         Within Rolling Window
-           ~ Mean horizon return (μ̂^(H))
-               μ̂^(H) = (1 / W) * Σ r_t^(H)
-             Represents the average realized Horizon return.
-           ~ Return dispersion (sample Variance)
-                D̂^(M) = (1 / (W − 1)) * Σ (r_t^(M) − μ̂^(M))²
-             Represents the empirical dispersion of monthly returns 
-             (not volatility modeling)
+ * Step 4-- Statistical estimation
+    
+    Within Rolling Window
+  
+   - Mean horizon return (μ̂^(H))
+       μ̂^(H) = (1 / W) * Σ r_t^(H)
+       Represents the average realized Horizon return.
+     
+   - Return dispersion (sample Variance)
+        D̂^(M) = (1 / (W − 1)) * Σ (r_t^(M) − μ̂^(M))²
+
+        Represents the empirical dispersion of monthly returns 
+        (not volatility modeling)
 
   **5 Output Structure**
       *Final output format for 1 month as example horizon*
