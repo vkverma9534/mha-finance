@@ -10,11 +10,11 @@ from datetime import datetime, timezone, timedelta
 
 
 
-def fetch_2minute_ohlcv(      #-> For estimating 1 week scenarios
+def fetch_5minute_ohlcv(      #-> For estimating intraday scenarios
     symbol: str,
     start: str,
     end: str | None = None,
-    interval: str = "2m"
+    interval: str = "5m"
 ) -> pd.DataFrame:
     if end is None:
         end = datetime.now(timezone.utc)
@@ -56,15 +56,15 @@ def fetch_2minute_ohlcv(      #-> For estimating 1 week scenarios
 
 # intraday_start = datetime.now(timezone.utc) - timedelta(days=50)
 
-# intraday_data_fetch = fetch_2minute_ohlcv(
+# intraday_data_fetch = fetch_5minute_ohlcv(
 #     symbol="AAPL",
 #     start=intraday_start,
-#     interval="2m"
+#     interval="5m"
 # )
 
 
 
-def fetch_daily_ohlcv(    #-> For estimating 1 year scenarios
+def fetch_daily_ohlcv(    #-> For estimating all scenarios other than intraday
     symbol: str,
     start: str,
     end: str | None = None,
@@ -108,7 +108,7 @@ def fetch_daily_ohlcv(    #-> For estimating 1 year scenarios
     return df[["timestamp", "open", "high", "low", "close", "volume"]]
 #use case
 
-# year_data_start = datetime.now(timezone.utc) - timedelta(days=365*10)
+# year_data_start = datetime.now(timezone.utc) - timedelta(days=365*15)
 
 # year_data_fetch = fetch_daily_ohlcv(
 #     symbol="AAPL",
@@ -118,9 +118,9 @@ def fetch_daily_ohlcv(    #-> For estimating 1 year scenarios
 #--------------------------------------------------------------------
 # use case
 
-# week_data_start = datetime.now(timezone.utc) - timedelta(days=365*15)
+# week_data_start = datetime.now(timezone.utc) - timedelta(days=365*2)
 
-# week_data_fetch = fetch_minute_ohlcv(
+# week_data_fetch = fetch_daily_ohlcv(
 #     symbol="AAPL",
 #     start=week_data_start,
 #     interval="1d"
@@ -131,7 +131,7 @@ def fetch_daily_ohlcv(    #-> For estimating 1 year scenarios
 
 # month_data_start = datetime.now(timezone.utc) - timedelta(days=365*5)
 
-# month_data_fetch = fetch_hourly_ohlcv(
+# month_data_fetch = fetch_daily_ohlcv(
 #     symbol="AAPL",
 #     start=month_data_start,
 #     interval="1d"
