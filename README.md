@@ -2,7 +2,7 @@
 mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of Financial Time Series. It focuses on regime characterization, risk-return estimation, and horizon-dependent dynamics.
 
 ## Objectives of the project:
-1. Statistically characterize monthly asset returns (A statistical estimation, not prediction.
+1. Statistically characterize monthly asset returns (A statistical estimation, not prediction).
 2. 
 
 
