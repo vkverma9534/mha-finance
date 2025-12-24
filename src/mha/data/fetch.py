@@ -5,11 +5,6 @@ from datetime import datetime, timezone, timedelta
 
 
 
-
-
-
-
-
 def fetch_5minute_ohlcv(      #-> For estimating intraday scenarios
     symbol: str,
     start: str,
