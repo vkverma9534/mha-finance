@@ -120,8 +120,25 @@ def calculating_mean_horizon_return(log_returns: np.ndarray) -> float:
 def median_return(log_returns: np.ndarray) -> float:
     return np.median(log_returns)
 
-def geometric_mean_from_log_returns(log_returns: np.ndarray) -> float:
-    return np.exp(log_returns.mean()) - 1
+def time_weighted_returns(
+    log_returns: np.ndarray,
+    decay_parameter: float | None = None
+) -> float:
+    
+
+    if decay_parameter is None:
+        decay_parameter = 0.94  # healthy default for monthly data
+
+    if not (0 < decay_parameter < 1):
+        raise ValueError("decay_parameter must be in (0, 1)")
+
+    
+    r = log_returns[::-1]
+    n = len(r)
+    weights = (1 - decay_parameter) * decay_parameter ** np.arange(n)
+    weights /= weights.sum()
+
+    return float(np.dot(weights, r))
 
 def dispersion(returns: np.ndarray) -> float:
     return np.var(returns, ddof=1)
