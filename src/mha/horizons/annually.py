@@ -110,7 +110,7 @@ Window = len(year_data_fetch)/Horizon
 #        μ̂^(H) = (1 / W) * Σ r_t^(H)
 #        Represents the average realized Horizon return.
 #    - Return dispersion (sample Variance)
-#         D̂^(M) = (1 / (W − 1)) * Σ (r_t^(M) − μ̂^(M))²
+#         D̂^(H) = (1 / (W − 1)) * Σ (r_t^(H) − μ̂^(H))²
 #     Represents the empirical dispersion of monthly returns
 #          (not volatility modeling)
 
@@ -124,15 +124,10 @@ def time_weighted_returns(
     log_returns: np.ndarray,
     decay_parameter: float | None = None
 ) -> float:
-    
-
     if decay_parameter is None:
         decay_parameter = 0.88  # healthy default for yearly data
-
     if not (0 < decay_parameter < 1):
         raise ValueError("decay_parameter must be in (0, 1)")
-
-    
     r = log_returns[::-1]
     n = len(r)
     weights = (1 - decay_parameter) * decay_parameter ** np.arange(n)
