@@ -61,7 +61,7 @@ def find_daily_estimations(symbol: str, decay_parameter: float) -> np.ndarray:
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
 
-    #  Step 4-- Statistical estimation
+    #  Step 3-- Statistical estimation
 
     #     Within Rolling Window
     #    - Mean horizon return (μ̂^(H))
