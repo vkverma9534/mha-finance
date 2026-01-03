@@ -6,121 +6,8 @@ from typing import List
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 
-#  Step 1-- Data Ingestion
 
-#    Data Based on horizon is loaded and cleaned
-#      - Incomplete current-day records are removed.
-#      - Data is sorted chronologically.
-
-month_data_start = datetime.now(timezone.utc) - timedelta(days=365*5)
-
-month_data_fetch = fetch_daily_ohlcv(
-    symbol="AAPL",
-    start=month_data_start,
-    interval="1d",
-    end = datetime.now(timezone.utc)-timedelta(days=1)
-)
-
-month_data_fetch=month_data_fetch.sort_values(by="timestamp")
-
-
-# Step 2-- Return Construction
-
-#    Horizon-based log returns are computed from closing prices for each
-#    interval specified by the horizon selection (see 3):
-#      - Let P_t be the closing price on day t.
-#      - Declare horizon (H) based on selection of user
-#              (eg. H=21 for Monthly horizon by user)
-#      - The return ending at at time t is:
-#                       r_t^(H) = log(P_t) - log(P_{t-H})
-#      This produces a time series of realized monthly returns.
-
-
-# assuming price as average of "OHLC" features
-def realized_price_proxy_at(
-    time: pd.Timestamp,
-    df: pd.DataFrame
-) -> float:
-    try:
-        prices = df.loc[time, ["open", "high", "low", "close"]].values
-    except KeyError:
-        raise ValueError(f"No data found for timestamp {time}")
-
-    if not np.isfinite(prices).all():
-        raise ValueError(f"Invalid OHLC values at {time}")
-
-    if (prices <= 0).any():
-        raise ValueError(f"Non-positive OHLC values at {time}")
-
-    return float(prices.mean())
-# Use case for Price_at_instance_t()
-# P = Price_at_instance_t(
-#     time="2020-12-28 00:00:00+00:00",
-#     df=month_data_fetch
-# )
-
-Horizon=21  # number of working days in a month for stock exchange
-
-
-
-def fetch_separation_time(
-    horizon: int,
-    df: pd.DataFrame,
-) -> np.ndarray:
-
-    time_instances: List[datetime] = []
-
-    total_rows = len(df)
-    i = 0
-
-    while total_rows - i - 1 >= 0:
-        time_instance = df.iloc[total_rows - i - 1]["timestamp"]
-        time_instances.append(time_instance)
-        i += horizon
-
-    return np.array(time_instances)
-
-#Use Case
-# time = fetch_separation_time(
-#       horizon=21,
-#       df=month_data_fetch,
-#   )
-# time.size
-
-def Calculate_log_returns_at_an_instance(
-    current_Price: float,
-    last_horizon_price,
-) -> float:
-    return math.log(current_Price / last_horizon_price)
-
-#  Step 3-- Rolling estimation window
-
-#   Rolling estimation window
-#    - W = Data Span for the horizon / Horizon Length.
-#    - Returns inside the window are assumed locally stationary.
-#    - This Window defines the data used for estimation.
-#    - Each rolling window defines the data used for statistical estimation.
-
-Window = 60
-
-#  Step 4-- Statistical estimation
-
-#     Within Rolling Window
-#    - Mean horizon return (μ̂^(H))
-#        μ̂^(H) = (1 / W) * Σ r_t^(H)
-#        Represents the average realized Horizon return.
-#    - Return dispersion (sample Variance)
-#         D̂^(M) = (1 / (W − 1)) * Σ (r_t^(M) − μ̂^(M))²
-#     Represents the empirical dispersion of monthly returns
-#          (not volatility modeling)
-
-def calculating_mean_horizon_return(log_returns: np.ndarray) -> float:
-    return log_returns.mean()
-
-def median_return(log_returns: np.ndarray) -> float:
-    return np.median(log_returns)
-
-def time_weighted_returns(
+def monthly_time_weighted_returns(
     log_returns: np.ndarray,
     decay_parameter: float | None = None
 ) -> float:
@@ -140,5 +27,66 @@ def time_weighted_returns(
 
     return float(np.dot(weights, r))
 
-def dispersion(returns: np.ndarray) -> float:
-    return np.var(returns, ddof=1)
+def find_monthly_estimations(symbol: str, decay_parameter: float) -> np.ndarray:
+    #  Step 1-- Data Ingestion
+
+    #    Data Based on horizon is loaded and cleaned
+    #      - Incomplete current-day records are removed.
+    #      - Data is sorted chronologically.
+
+    month_data_fetch = get_my_data(days=365 * 5, symbol=symbol)
+
+    # Step 2-- Return Construction
+
+    #    Horizon-based log returns are computed from closing prices for each
+    #    interval specified by the horizon selection (see 3):
+    #      - Let P_t be the closing price on day t.
+    #      - Declare horizon (H) based on selection of user
+    #              (eg. H=21 for Monthly horizon by user)
+    #      - The return ending at at time t is:
+    #                       r_t^(H) = log(P_t) - log(P_{t-H})
+    #      This produces a time series of realized monthly returns.
+
+    horizon = 22
+    time_instances = fetch_separation_time(horizon=horizon, df=month_data_fetch)
+    time_instances = sorted(time_instances)
+
+    price_instances = [None] * len(time_instances)
+    log_returns_instances = [None] * (len(time_instances) - 1)
+
+    for i in range(len(time_instances)):
+        price_instances[i] = realized_price_proxy_at(
+            time=time_instances[i],
+            df=month_data_fetch
+        )
+
+    for i in range(len(time_instances) - 1):
+        log_returns_instances[i] = Calculate_log_returns_at_an_instance(
+            current_Price=price_instances[i],
+            last_horizon_price=price_instances[i + 1]
+        )
+
+    log_returns_instances = np.asarray(log_returns_instances, dtype=float)
+
+    #  Step 4-- Statistical estimation
+
+    #     Within Rolling Window
+    #    - Mean horizon return (μ̂^(H))
+    #        μ̂^(H) = (1 / W) * Σ r_t^(H)
+    #        Represents the average realized Horizon return.
+    #    - Return dispersion (sample Variance)
+    #         D̂^(H) = (1 / (W − 1)) * Σ (r_t^(H) − μ̂^(H))²
+    #     Represents the empirical dispersion of monthly returns
+    #          (not volatility modeling)
+
+    deliverables = np.array([
+        calculating_mean_horizon_return(log_returns=log_returns_instances),
+        median_return(log_returns=log_returns_instances),
+        monthly_time_weighted_returns(
+            log_returns=log_returns_instances,
+            decay_parameter=decay_parameter
+        ),
+        dispersion(log_returns=log_returns_instances)
+    ], dtype=float)
+
+    return deliverables

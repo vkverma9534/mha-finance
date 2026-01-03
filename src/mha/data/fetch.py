@@ -1,63 +1,7 @@
 import yfinance as yf
 import pandas as pd
+import numpy as np
 from datetime import datetime, timezone, timedelta
-
-
-
-
-def fetch_5minute_ohlcv(      #-> For estimating intraday scenarios
-    symbol: str,
-    start: str,
-    end: str | None = None,
-    interval: str = "5m"
-) -> pd.DataFrame:
-    if end is None:
-        end = datetime.now(timezone.utc)
-
-    df = yf.download(
-        tickers=symbol,
-        start=start,
-        end=end,
-        interval=interval,
-        auto_adjust=False,
-        progress=False
-    )
-
-    if df.empty:
-        raise ValueError("No data fetched — check interval/date limits")
-
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-
-    df = df.reset_index()
-
-    df = df.rename(columns={
-        "Datetime": "timestamp",
-        "Open": "open",
-        "High": "high",
-        "Low": "low",
-        "Close": "close",
-        "Volume": "volume"
-    })
-
-    df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True)
-
-    now = pd.Timestamp.utcnow().floor("min")
-    df = df[df["timestamp"] < now]
-
-    return df[["timestamp", "open", "high", "low", "close", "volume"]]
-
-# Use case
-
-# intraday_start = datetime.now(timezone.utc) - timedelta(days=50)
-
-# intraday_data_fetch = fetch_5minute_ohlcv(
-#     symbol="AAPL",
-#     start=intraday_start,
-#     interval="5m"
-# )
-
-
 
 def fetch_daily_ohlcv(    #-> For estimating all scenarios other than intraday
     symbol: str,
@@ -101,33 +45,48 @@ def fetch_daily_ohlcv(    #-> For estimating all scenarios other than intraday
     df = df[df["timestamp"] < now]
 
     return df[["timestamp", "open", "high", "low", "close", "volume"]]
-#use case
 
-# year_data_start = datetime.now(timezone.utc) - timedelta(days=365*15)
+def get_my_data(
+    days: int,
+    symbol: str
+) -> pd.DataFrame:
+    data_start = datetime.now(timezone.utc) - timedelta(days=days)
 
-# year_data_fetch = fetch_daily_ohlcv(
-#     symbol="AAPL",
-#     start=year_data_start,
-#     interval="1d"
-# )
-#--------------------------------------------------------------------
-# use case
+    data_fetch = fetch_daily_ohlcv(
+        symbol=symbol,
+        start=data_start,
+        interval="1d",
+        end=datetime.now(timezone.utc) - timedelta(days=1)
+    )
 
-# week_data_start = datetime.now(timezone.utc) - timedelta(days=365*2)
+    if isinstance(data_fetch.index, pd.DatetimeIndex):
+        data_fetch = data_fetch.sort_index()
+    else:
+        time_col = next(
+            col for col in data_fetch.columns
+            if col.lower() in {"timestamp", "date", "datetime", "time"}
+        )
 
-# week_data_fetch = fetch_daily_ohlcv(
-#     symbol="AAPL",
-#     start=week_data_start,
-#     interval="1d"
-# )
+        data_fetch[time_col] = pd.to_datetime(
+            data_fetch[time_col],
+            utc=True,
+            errors="coerce"
+        )
 
-#---------------------------------------------------------------------
-#use case
+    data_fetch = (
+        data_fetch
+        .dropna(subset=[time_col])
+        .sort_values(time_col)
+        .set_index(time_col)
+    )
 
-# month_data_start = datetime.now(timezone.utc) - timedelta(days=365*5)
+    ohlc_cols = ["open", "high", "low", "close"]
+    data_fetch[ohlc_cols] = data_fetch[ohlc_cols].apply(
+        pd.to_numeric,
+        errors="coerce"
+    )
 
-# month_data_fetch = fetch_daily_ohlcv(
-#     symbol="AAPL",
-#     start=month_data_start,
-#     interval="1d"
-# )
+    data_fetch = data_fetch.dropna(subset=ohlc_cols)
+    data_fetch = data_fetch[(data_fetch[ohlc_cols] > 0).all(axis=1)]
+    return data_fetch
+
