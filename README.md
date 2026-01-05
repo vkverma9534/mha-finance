@@ -256,7 +256,8 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
 **5 Output construction and delivery**
 
   For each horizon and evaluation point, the framewok outputs a structured volatility
-  summary;
+  summary:
+  
     - Estimated volatility level
     - Associated uncertainty measures
     - Stability indicators
@@ -265,6 +266,7 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         - window size
         - estimator used
         - data span
+        
   This output is descriptive, interpretable, and reproducible.
   
  **6 Concepts Involved**
