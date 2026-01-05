@@ -186,3 +186,107 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   - *Annual estimation*:-
   A daily interval data of 15 years
 
+ **4 Steps for achieving this objective**
+
+* Step 1-- Data Ingestion
+   
+   Data Based on horizon is loaded and cleaned
+     - Incomplete current-day records are removed.
+       
+     - Data is sorted chronologically.
+
+* Step 2-- Return Series construction
+
+  Volatility estimation is performed on returns, not prices.
+    - Let Pt denote the closing price at time t.
+      
+    - Log returns are consrtructed at the base sampling frequency:
+          rt = log(Pt)-log(Pt-1)
+  This produces a time series of realized returns, which serves as the
+  input for volatility estimation.
+
+  (Note: The return frequency is decoupled from estimation horizon. Higher
+  frequency returns may be used to characterize lower-frequency volatility.)]
+
+* Step 3-- Rolling estimation window
+
+  A rolling estimation window is defined to support conditional and adaptive
+  estimation
+    - Let W denote the number of observations in the rolling window.
+    - Window length is determined by:
+       - hoizon selection
+       - required historical depth
+    - Returns within each window are assumed locally stationary.
+
+* Step 4-- Statistical volatility estimation
+
+  Within each rolling window,, volatility is estimated using statistical estimators, 
+  not predictive models
+
+  Typical estimators include:
+  - Sample varince
+      σ^2 = (1\(W-1))*∑(rt-rˉ)^2
+  - Rolling standard deviation
+      σ = (σ^2)^(1/2)
+  - Exponentially Weighted Moving Average (EWMA)
+      σ(t)^2 = λσ(t-1)^2 + (1-λ)r(t)^2
+
+  These estimators characterize recent conditional variability. not future risk.
+
+* Step 5-- Volatility uncertainty and dispersion analysis
+
+  Beyond point estimation, the framework evaluates uncertainty and robustness of
+  volatility estimates.
+    - Dispersion of volaility estimates across windows
+    - Sensitivity to window length
+    - Temporal smoothness or clustering behavior
+
+  This step quantifies how stable or unstable volatility estimates are over time.
+
+* Step 6-- Stabilty diagnostics
+
+  Stability diagnostics are computed to assess whether volatility assumptions remain valid.
+
+    - Detection of abrupt changes in variability
+    - Parameter drift (for conditional estimators)
+    - Breakdown of local stationary assumptions
+
+  These diagnostics flag instability but do not trigger automated actions.
+
+**5 Output construction and delivery**
+
+  For each horizon and evaluation point, the framewok outputs a structured volatility
+  summary;
+    - Estimated volatility level
+    - Associated uncertainty measures
+    - Stability indicators
+    - Metadata:
+        - horizon
+        - window size
+        - estimator used
+        - data span
+  This output is descriptive, interpretable, and reproducible.
+  
+ **6 Concepts Involved**
+      
+  Concepts Of Finance
+        
+            Log-returns  
+            Realized volatility  
+            Conditional volatility  
+            Volatility clustering  
+            Volatility persistence  
+    
+
+        
+  Concepts of Statistics
+
+            Squared returns  
+            Rolling variance  
+            Rolling standard deviation  
+            Exponentially weighted moving averages (EWMA)  
+            Sensitivity to window length  
+
+
+
+
