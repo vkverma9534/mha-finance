@@ -64,5 +64,3 @@ def median_return(log_returns: np.ndarray) -> float:
 
 def dispersion(log_returns: np.ndarray) -> float:
     return np.var(log_returns, ddof=1)
-
-

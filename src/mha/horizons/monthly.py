@@ -27,14 +27,16 @@ def monthly_time_weighted_returns(
 
     return float(np.dot(weights, r))
 
-def find_monthly_estimations(symbol: str, decay_parameter: float) -> np.ndarray:
+def find_monthly_estimations(symbol: str, decay_parameter: float, lookback: float | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
+    if lookback is None:
+        lookback=5
 
-    month_data_fetch = get_my_data(days=365 * 5, symbol=symbol)
+    month_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
 
     # Step 2-- Return Construction
 

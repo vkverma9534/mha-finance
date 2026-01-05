@@ -20,14 +20,17 @@ def daily_time_weighted_returns(
     weights /= weights.sum()
     return float(np.dot(weights, r))
 
-def find_daily_estimations(symbol: str, decay_parameter: float) -> np.ndarray:
+def find_daily_estimations(symbol: str, decay_parameter: float, lookback: float | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
 
-    daily_data_fetch = get_my_data(days=70, symbol=symbol)
+    if lookback is None:
+        lookback=365*0.2
+
+    daily_data_fetch = get_my_data(days=lookback, symbol=symbol)
 
     # Step 2-- Return Construction
 

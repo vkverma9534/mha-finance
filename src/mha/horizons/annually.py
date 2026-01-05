@@ -22,14 +22,17 @@ def annual_time_weighted_returns(
 
     return float(np.dot(weights, r))
 
-def find_annaul_estimations(symbol: str, decay_parameter: float) -> np.ndarray:
+def find_annaul_estimations(symbol: str, decay_parameter: float, lookback: float | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
 
-    annual_data_fetch = get_my_data(days=365 * 15, symbol=symbol)
+    if lookback is None:
+        lookback=15
+
+    annual_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
 
     # Step 2-- Return Construction
 
