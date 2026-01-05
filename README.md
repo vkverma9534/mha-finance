@@ -2,8 +2,8 @@
 mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of Financial Time Series. It focuses on regime characterization, risk-return estimation, and horizon-dependent dynamics.
 
 ## Objectives of the project:
-1. Statistically characterize monthly asset returns (A statistical estimation, not prediction).
-2. 
+1. Statistically characterize horizon-wise asset returns (A statistical estimation, not prediction).
+2. Statistically characterize horizon-wise asset volatility.
 
 
 
@@ -11,17 +11,17 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
 
 ## Problem statement definition for each Objective
 
-### 1. Statistically characterize monthly asset returns (A statistical estimation, not prediction).
+### 1. Statistically characterize horizon-wise asset returns (A statistical estimation, not prediction).
 
 
- **1 The objective is to statistically characterize monthly asset returns using historical price       data, without predicting future prices.**
+ **1 The objective is to statistically characterize horizon-specific asset returns using historical price data, without predicting future prices.**
 
   *Given historical daily price data over a sufficiently long period*
   *(e.g., 5 years for monthly estimation), the system estimates:*
     
   - The average realized monthly return
-  - The dispersion of monthly returns
-  - The uncertainty associated with estimated mean**
+  - The dispersion of horizon-specific returns
+  - The uncertainty associated with estimated mean
         
    All estimates are descriptive and inferential, not predictive.
 
@@ -139,3 +139,50 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         Effective sample size
         
   *Machine learning is intentionally not used to avoid unjustified prediction*
+
+  ### 2. Statistically characterize horizon-wise asset volatility (Statistically estimation of conditional variabilty).
+  
+   **1 The objective is to statistically characterize horizon-specific asset returns using historical price data, without predicting future volatility or market movements.**
+
+  *Given historical daily price data over a sufficiently long period and at an appropriate sampling frequency,*
+  *depending on horizon we must have long lookback window. The system estimates the recent conditional variability*
+  *of returns, along with measures of uncertainty and stability.*
+
+   Specifically, the framework estimates:
+  - The realized or conditional volatility at a given horizon
+  - The dispersion and variability of volatility estimates across rolling windows
+  - Diagnostic measures indicating the stability or degradation of volatility estimatprs
+        
+   All estimates are descriptive and inferential, not predictive.
+   
+ **2 Scope of the Objective**
+
+  *In scope* 
+     
+  - Statistical volatility estimation 
+  - Rolling and window-based estimators
+  - Horizon specific volatility Characterization
+  - Uncertainty and stability diagnostics
+  - Conditional and regime-aware volatility
+
+  *Out of scope*
+
+  - Volatility prediction or forecasting
+  - Profit or risk optimization
+  - Trading, hedging, or portfolio construction strategies
+  - Automated decision-making or alerts
+
+ **3 Horizon based data span selection** 
+
+  - *Intra-Day estimation*:-
+  A daily interval data of 70 Days
+      
+  - *Weekly estimation*:-
+  A daily interval data of 2 years
+      
+  - *Monthly estimation*:-
+  A daily interval data of 5 years
+      
+  - *Annual estimation*:-
+  A daily interval data of 15 years
+
