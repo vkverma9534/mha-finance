@@ -32,7 +32,7 @@ def fetch_separation_time(
     i = 0
 
     while total_rows - i - 1 >= 0:
-        time_instance = df.iloc[total_rows - i - 1]["timestamp"]
+        time_instance = df.index[total_rows - i - 1]
         time_instance=pd.to_datetime(time_instance)
         time_instances.append(time_instance)
         i += horizon
