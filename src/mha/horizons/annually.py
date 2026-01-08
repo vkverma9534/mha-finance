@@ -60,8 +60,8 @@ def find_annaul_estimations(symbol: str, decay_parameter: float, lookback: float
 
     for i in range(len(time_instances) - 1):
         log_returns_instances[i] = Calculate_log_returns_at_an_instance(
-            current_Price=price_instances[i],
-            last_horizon_price=price_instances[i + 1]
+            current_Price=price_instances[i+1],
+            last_horizon_price=price_instances[i]
         )
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
