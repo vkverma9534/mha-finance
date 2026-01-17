@@ -26,7 +26,7 @@ def weekly_time_weighted_returns(
 
     return float(np.dot(weights, r))
 
-def find_weekly_estimations(symbol: str, decay_parameter: float, lookback: float | None = None) -> np.ndarray:
+def find_weekly_estimations(symbol: str, decay_parameter: float| None = None, lookback: float | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
