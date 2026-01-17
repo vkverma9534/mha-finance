@@ -28,7 +28,7 @@ def find_daily_estimations(symbol: str, decay_parameter: float| None = None, loo
     #      - Data is sorted chronologically.
 
     if lookback is None:
-        lookback=365*0.2
+        lookback=70//365
 
     daily_data_fetch = get_my_data(days=lookback, symbol=symbol)
 
