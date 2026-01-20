@@ -75,7 +75,7 @@ def find_daily_stability(symbol: str,
     deliverables = {
     "volatility": volatility_estimation(log_returns_instances),
     "time_weighted_volatility": time_weighted_volatility(
-        horizon="Month",
+        horizon="Day",
         log_returns=log_returns_instances,
         decay_parameter=decay_parameter
     ),
