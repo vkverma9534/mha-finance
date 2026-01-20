@@ -248,7 +248,6 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   Stability diagnostics are computed to assess whether volatility assumptions remain valid.
 
     - Detection of abrupt changes in variability
-    - Parameter drift (for conditional estimators)
     - Breakdown of local stationary assumptions
 
   These diagnostics flag instability but do not trigger automated actions.
