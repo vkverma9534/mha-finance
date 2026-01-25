@@ -85,10 +85,10 @@ def find_daily_stability(symbol: str,
     "relative_volatility_change": relative_volatility_change(
         log_returns=log_returns_instances
     ),
-    "temporal_smoothness_curve": temporal_smoothness_curve(
-        log_returns_instances,
-        window_length=window_length
-    ),
+    "temporal_smoothness_diagnostics": diagnostics(
+            log_returns=log_returns_instances,
+            window_length=window_length
+        ),
     }
 
     return deliverables
