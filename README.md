@@ -4,10 +4,8 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
 ## Objectives of the project:
 1. Statistically characterize horizon-wise asset returns (A statistical estimation, not prediction).
 2. Statistically characterize horizon-wise asset volatility.
-
-
-
-
+3. Statistically Characterize Horizon-Wise Market Regimes.
+   
 
 ## Problem statement definition for each Objective
 
@@ -140,9 +138,9 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
         
   *Machine learning is intentionally not used to avoid unjustified prediction*
 
-  ### 2. Statistically characterize horizon-wise asset volatility (Statistically estimation of conditional variabilty).
+### 2. Statistically characterize horizon-wise asset volatility (Statistically estimation of conditional variabilty).
   
-   **1 The objective is to statistically characterize horizon-specific asset returns using historical price data, without predicting future volatility or market movements.**
+   **1 The objective is to statistically characterize horizon-specific asset volatility using historical price data, without predicting future volatility or market movements.**
 
   *Given historical daily price data over a sufficiently long period and at an appropriate sampling frequency,*
   *depending on horizon we must have long lookback window. The system estimates the recent conditional variability*
@@ -288,5 +286,100 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
             Sensitivity to window length  
 
 
+### 3. Statistically Characterize Horizon-Wise Market Regimes.
 
+   **1 The objective is to statistically characterize horizon-specific market regime using historical price data, 
+   without predicting future volatility or market movements.(“This module provides a foundation for future extensions 
+   such as regime persistence analysis and transition summaries.”)**
 
+  *Given horizon-wise statistical summaries of asset returns and volatility computed over rolling windows*
+  *(Objectivea 1 and 2), the system identifies distinct statistical regimes that describe recurring market conditions*
+  *at a given horizon.*
+
+  *Regimes are defined ex post as periods during which the joint statistical behaviour of returns and volatility remains*
+  *approximately stable.*
+
+  No attempt is made to forecast regime changes or optimize decisions based on regimes.
+
+ **2 Scope of the Objective**
+
+  *In scope* 
+     
+  - Descriptive regime identification
+  - Horizon-wise return–volatility characterization
+  - Uncertainty quantification
+
+  *Out of scope*
+
+  - Prediction or forecasting
+  - Trading or decision systems
+
+ **3 Horizon based data span selection** 
+
+  - *Intra-Day estimation*:-
+  A daily interval data of 70 Days
+      
+  - *Weekly estimation*:-
+  A daily interval data of 2 years
+      
+  - *Monthly estimation*:-
+  A daily interval data of 5 years
+      
+  - *Annual estimation*:-
+  A daily interval data of 15 years
+
+ **4 Steps for achieving this objective**
+
+* Step 1-- Data Ingestion
+   
+   Data Based on horizon is loaded and cleaned
+     - Incomplete current-day records are removed.
+       
+     - Data is sorted chronologically.
+
+* Step 2-- Statistical feature construction
+
+  Regime identification is performed on statistical estimates, not raw prices.
+    - Horizon-wise return estimates are constructed. 
+    - Horizon-wise volatility estimates are constructed.
+      
+  These estimates represent the statistical behavior of the market at each
+  time index.
+
+* Step 3-- Horizon-wise regime identification
+
+  Regimes are identified by grouping time periods that exhibit similar
+  statistical behavior at the selected horizon.
+    - Each group corresponds to a distinct regime
+    - No predictive interpretation is attached to regime labels
+
+  Each historical time index is assigned a regime identifier.
+
+**5 Output construction and delivery**
+
+  For each horizon and evaluation point, the framework outputs a structured regime
+  identification result:
+  
+    - Regime label for each historical time index
+    - Number of identified regimes
+    - Metadata:
+        - horizon
+        - lookback window
+        - identification method
+    
+  This output is descriptive, interpretable, and reproducible.
+
+   **6 Concepts Involved**
+      
+  Concepts Of Finance
+        
+            Market regimes  
+            Horizon-dependent behavior  
+            Risk–return states   
+    
+
+        
+  Concepts of Statistics
+
+            Statistical similarity  
+            Unsupervised partitioning  
