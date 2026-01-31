@@ -25,17 +25,12 @@ def returns_trigger(symbol: str,
                                               lookback=lookback,
                                               decay_parameter=decay_parameter)
         
+    
+    horizon_map = {
+         "Monthly",
+         "Annual",
+         "Weekly",
+         "Daily",
+    }
 
-    print(f"symbol: {symbol}")
-    if(horizon=="M"):
-        print(f"Horizon: Monthly")
-    if(horizon=="A"):
-        print(f"Horizon: Annual")
-    if(horizon=="W"):
-        print(f"Horizon: Weekly")
-    if(horizon=="D"):
-        print(f"Horizon: Daily")
-    print(f"Mean Returns: {deliverables[0]*100}%")
-    print(f"Median Returns: {deliverables[1]*100}%")
-    print(f"Time Weighted Mean Returns: {deliverables[2]*100}%")
-    print(f"Dispersion: {deliverables[3]*100}%")
+    
