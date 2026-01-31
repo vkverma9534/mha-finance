@@ -1,10 +1,9 @@
-import numpy as np
-import math
-from typing import List
-import plotly.graph_objects as go
-from scipy.ndimage import gaussian_filter1d
-import pandas as pd
+
 from datetime import datetime, timezone, timedelta
+from mha.volatility.daily_v import find_daily_stability
+from mha.volatility.monthly_v import find_monthly_stability
+from mha.volatility.weekly_v import find_weekly_stability
+from mha.volatility.annually_v import find_annually_stability
 
 
 def volatility_trigger(
@@ -14,23 +13,23 @@ def volatility_trigger(
     decay_parameter: float | None = None,
     window_length: float | None = None,
     diagnostics: bool = False
-):
-    if horizon == "M":
+)-> dict:
+    if horizon[0].lower() == "m":
         deliverables = find_monthly_stability(symbol=symbol,
                                               lookback=lookback,
                                               decay_parameter=decay_parameter,
                                               window_length=window_length)
-    elif horizon == "A":
-        deliverables = find_annaully_stability(symbol=symbol,
+    elif horizon[0].lower() == "a" or horizon[0].lower() == "y":
+        deliverables = find_annually_stability(symbol=symbol,
                                               lookback=lookback,
                                               decay_parameter=decay_parameter,
                                               window_length=window_length)
-    elif horizon == "W":
+    elif horizon[0].lower() == "w":
         deliverables = find_weekly_stability(symbol=symbol,
                                               lookback=lookback,
                                               decay_parameter=decay_parameter,
                                               window_length=window_length)
-    elif horizon == "D":
+    elif horizon[0].lower() == "d":
         deliverables = find_daily_stability(symbol=symbol,
                                               lookback=lookback,
                                               decay_parameter=decay_parameter,
@@ -38,12 +37,23 @@ def volatility_trigger(
     else:
         raise ValueError("Invalid horizon")
 
-    print(f"Symbol: {symbol}")
-    print(f"Horizon: {horizon}")
+    summary = {
+        "symbol": symbol,
+        "horizon": horizon,
 
-    print(f"Volatility of Returns: {deliverables['volatility']*100:.2f}%")
-    print(f"Time Weighted Volatility: {deliverables['time_weighted_volatility']*100:.2f}%")
-    print(f"Volatility Uncertainty: {deliverables['volatility_dispersion']*100:.2f}%")
+        "volatility": {
+            "raw": deliverables["volatility"],
+            "percent": deliverables["volatility"] * 100,
+        },
+        "time_weighted_volatility": {
+            "raw": deliverables["time_weighted_volatility"],
+            "percent": deliverables["time_weighted_volatility"] * 100,
+        },
+        "volatility_uncertainty": {
+            "raw": deliverables["volatility_dispersion"],
+            "percent": deliverables["volatility_dispersion"] * 100,
+        }
+    }
 
     cond_num = deliverables["relative_volatility_change"] * 100
     flag = (
@@ -52,11 +62,14 @@ def volatility_trigger(
         else "High (Unsafe)"
     )
 
-    print(f"Relative Volatility Change: {cond_num:.2f}% → {flag}")
+    summary["relative_volatility_change"] = {
+        "percent": cond_num,
+        "flag": flag,
+    }
 
     if diagnostics:
-        print("Temporal Smoothness Diagnostics:")
-        print("  • Interactive Plotly figure")
-        deliverables["temporal_smoothness_diagnostics"].show()
+        summary["temporal_smoothness_diagnostics"] = deliverables[
+            "temporal_smoothness_diagnostics"
+        ]
 
-    return deliverables
+    return summary
