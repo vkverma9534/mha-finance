@@ -378,8 +378,81 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
             Risk–return states   
     
 
+
+
         
   Concepts of Statistics
 
             Statistical similarity  
-            Unsupervised partitioning  
+            Unsupervised partitioning
+
+
+            
+## Data Source and Usage:
+1. Market Data Source
+2. Data Handling Policy
+3. Use of Derived Insights
+4. Responsibility and Compliance
+5. Design Philosophy
+
+   
+### Details
+
+#### 1. Market Data Source
+  **mha-finance retrieves historical market price data at runtime using publicly accessible endpoints provided by Yahoo Finance, via the open-source yfinance Python library.**
+
+  *The framework does not bundle, store, cache, or redistribute any financial datasets.*
+  *All market data:*
+    
+  - is fetched on demand
+  - is downloaded directly by the end user
+  - remains subject to Yahoo Finance’s terms of service
+
+    
+#### 2. Data Handling Policy
+  *The framework follows a non-redistributive data usage model:*
+    
+  - No raw OHLCV or intraday data is stored on disk
+  - No historical datasets are included in the repository
+  - No cached price data is persisted across sessions
+  - No market data is served to third parties
+
+  *Raw price data exists only transiently in memory during computation and is discarded after statistical*
+  *processing.*
+
+  #### 3. Use of Derived Insights
+  **mha-finance operates exclusively on derived statistical quantities, including:**
+    
+  - horizon-specific log returns
+  - rolling statistical moments (mean, variance)
+  - volatility estimators
+  - regime descriptors
+
+  *All outputs are descriptive statistical summaries or aggregated analytical results.*
+  *The framework does not expose or reconstruct raw historical price series.*
+
+  #### 4. Responsibility and Compliance
+  **By running mha-finance, users fetch market data directly from Yahoo Finance and are responsible for ensuring their usage complies with the data provider’s terms.**
+  
+  *The project provides:*
+  - analytical methodology
+  - statistical estimation tools
+  - reproducible computation logic
+
+  *but does not act as a data provider.*
+
+  #### 5. Design Philosophy
+  **This data access model is intentionally chosen to support:**
+  
+  - academic reproducibility
+  - educational use
+  - license-aware open-source distribution
+
+  *while avoiding unauthorized redistribution of proprietary financial data.*
+
+
+
+
+
+
+
