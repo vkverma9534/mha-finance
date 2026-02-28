@@ -1,14 +1,47 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mha-finance"
-version = "0.0.1"
+version = "0.1.0"
+description = "Multi-Horizon Statistical Modeling for Financial Time Series"
+readme = "README.md"
 requires-python = ">=3.9"
+license = { text = "MIT" }
+
+authors = [
+  { name = "Vikram Verma" }
+]
+
+dependencies = [
+  "numpy>=1.23",
+  "pandas>=1.5",
+  "scipy>=1.9",
+  "scikit-learn>=1.2",
+  "yfinance>=0.2",
+  "plotly>=5.15"
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=7.0"
+]
+dev = [
+  "pytest",
+  "black",
+  "ruff",
+  "build",
+  "twine"
+]
+
+[project.urls]
+Homepage = "https://github.com/vkverma9534/mha-finance"
+Repository = "https://github.com/vkverma9534/mha-finance"
+Issues = "https://github.com/vkverma9534/mha-finance/issues"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
