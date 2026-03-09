@@ -5,7 +5,7 @@ import math
 from typing import List
 import pandas as pd
 from datetime import datetime, timezone, timedelta
-from mha.data.fetch import get_my_data
+
 
 def monthly_time_weighted_returns(
     log_returns: np.ndarray,

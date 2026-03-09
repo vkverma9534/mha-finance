@@ -11,15 +11,14 @@ from mha.data.fetch import get_my_data
 
 def find_monthly_stability(symbol: str,
                            decay_parameter: float | None = None, 
-                           lookback: float | None = None, 
+                           lookback: int | None = None, 
                            window_length: int | None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
-    if lookback is None:
-        lookback=5
+    lookback = 5 if lookback is None else lookback
 
     if decay_parameter is not None and not (0 < decay_parameter < 1):
         raise ValueError("decay_parameter must be in (0, 1)")
@@ -46,20 +45,18 @@ def find_monthly_stability(symbol: str,
     if len(time_instances) < 2:
         raise ValueError("Insufficient data to compute returns")
 
-    price_instances = [None] * len(time_instances)
-    log_returns_instances = [None] * (len(time_instances) - 1)
+    price_instances = [
+        realized_price_proxy_at(time=t, df=month_data_fetch)
+        for t in time_instances
+    ]
 
-    for i in range(len(time_instances)):
-        price_instances[i] = realized_price_proxy_at(
-            time=time_instances[i],
-            df=month_data_fetch
+    log_returns_instances = [
+        Calculate_log_returns_at_an_instance(
+            current_Price=next_price,
+            last_horizon_price=prev_price
         )
-
-    for i in range(len(time_instances) - 1):
-        log_returns_instances[i] = Calculate_log_returns_at_an_instance(
-            current_Price=price_instances[i+1],
-            last_horizon_price=price_instances[i]
-        )
+        for prev_price, next_price in zip(price_instances[:-1], price_instances[1:])
+    ]
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
 

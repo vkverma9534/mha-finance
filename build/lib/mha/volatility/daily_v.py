@@ -10,21 +10,22 @@ from mha.evaluation.diagnostic import diagnostics
 from mha.data.fetch import get_my_data
 
 
-def find_weekly_stability(symbol: str,
+def find_daily_stability(symbol: str,
                            decay_parameter: float | None = None, 
-                           lookback: int | None = None, 
+                           lookback: float | None = None, 
                            window_length: int | None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
-    lookback = 2 if lookback is None else lookback
+    if lookback is None:
+        lookback=70//365
 
     if decay_parameter is not None and not (0 < decay_parameter < 1):
         raise ValueError("decay_parameter must be in (0, 1)")
 
-    week_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
+    day_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
 
  
 
@@ -39,25 +40,27 @@ def find_weekly_stability(symbol: str,
     #                       r_t^(H) = log(P_t) - log(P_{t-H})
     #      This produces a time series of realized monthly returns.
 
-    horizon = 5
-    time_instances = fetch_separation_time(horizon=horizon, df=week_data_fetch)
+    horizon = 1
+    time_instances = fetch_separation_time(horizon=horizon, df=day_data_fetch)
     time_instances = sorted(time_instances)
 
     if len(time_instances) < 2:
         raise ValueError("Insufficient data to compute returns")
 
-    price_instances = [
-        realized_price_proxy_at(time=t, df=week_data_fetch)
-        for t in time_instances
-    ]
+    price_instances = [None] * len(time_instances)
+    log_returns_instances = [None] * (len(time_instances) - 1)
 
-    log_returns_instances = [
-        Calculate_log_returns_at_an_instance(
-            current_Price=next_price,
-            last_horizon_price=prev_price
+    for i in range(len(time_instances)):
+        price_instances[i] = realized_price_proxy_at(
+            time=time_instances[i],
+            df=day_data_fetch
         )
-        for prev_price, next_price in zip(price_instances[:-1], price_instances[1:])
-    ]
+
+    for i in range(len(time_instances) - 1):
+        log_returns_instances[i] = Calculate_log_returns_at_an_instance(
+            current_Price=price_instances[i+1],
+            last_horizon_price=price_instances[i]
+        )
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
 
@@ -77,7 +80,7 @@ def find_weekly_stability(symbol: str,
     deliverables = {
     "volatility": volatility_estimation(log_returns_instances),
     "time_weighted_volatility": time_weighted_volatility(
-        horizon="Week",
+        horizon="Day",
         log_returns=log_returns_instances,
         decay_parameter=decay_parameter
     ),
@@ -90,7 +93,7 @@ def find_weekly_stability(symbol: str,
     "temporal_smoothness_diagnostics": diagnostics(
             log_returns=log_returns_instances,
             window_length=window_length
-    ),
+        ),
     }
 
     return deliverables

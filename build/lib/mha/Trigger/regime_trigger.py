@@ -9,7 +9,7 @@ def volatility_trigger(
     symbol: str,
     horizon: str,
     lookback: float | None = None,
-    window_length: int | None = None,
+    window_length: float | None = None,
 )-> dict:
     if horizon[0].lower() == "m":
         deliverables = flag_monthly_regime(symbol=symbol,

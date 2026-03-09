@@ -1,42 +1,36 @@
-#monthly.py
+#Daily.py
 
 import numpy as np
 import math
 from typing import List
 import pandas as pd
 from datetime import datetime, timezone, timedelta
-from mha.data.fetch import get_my_data
 
-def monthly_time_weighted_returns(
+def daily_time_weighted_returns(
     log_returns: np.ndarray,
     decay_parameter: float | None = None
 ) -> float:
-    
-
     if decay_parameter is None:
         decay_parameter = 0.94  # healthy default for monthly data
-
     if not (0 < decay_parameter < 1):
         raise ValueError("decay_parameter must be in (0, 1)")
-
-    
     r = log_returns[::-1]
     n = len(r)
     weights = (1 - decay_parameter) * decay_parameter ** np.arange(n)
     weights /= weights.sum()
-
     return float(np.dot(weights, r))
 
-def find_monthly_estimations(symbol: str, decay_parameter: float| None = None, lookback: float | None = None) -> np.ndarray:
+def find_daily_estimations(symbol: str, decay_parameter: float| None = None, lookback: float | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
-    if lookback is None:
-        lookback=5
 
-    month_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
+    if lookback is None:
+        lookback=70//365
+
+    daily_data_fetch = get_my_data(days=lookback, symbol=symbol)
 
     # Step 2-- Return Construction
 
@@ -49,8 +43,8 @@ def find_monthly_estimations(symbol: str, decay_parameter: float| None = None, l
     #                       r_t^(H) = log(P_t) - log(P_{t-H})
     #      This produces a time series of realized monthly returns.
 
-    horizon = 22
-    time_instances = fetch_separation_time(horizon=horizon, df=month_data_fetch)
+    horizon = 1
+    time_instances = fetch_separation_time(horizon=horizon, df=daily_data_fetch)
     time_instances = sorted(time_instances)
 
     price_instances = [None] * len(time_instances)
@@ -59,7 +53,7 @@ def find_monthly_estimations(symbol: str, decay_parameter: float| None = None, l
     for i in range(len(time_instances)):
         price_instances[i] = realized_price_proxy_at(
             time=time_instances[i],
-            df=month_data_fetch
+            df=daily_data_fetch
         )
 
     for i in range(len(time_instances) - 1):
@@ -84,7 +78,7 @@ def find_monthly_estimations(symbol: str, decay_parameter: float| None = None, l
     deliverables = np.array([
         calculating_mean_horizon_return(log_returns=log_returns_instances),
         median_return(log_returns=log_returns_instances),
-        monthly_time_weighted_returns(
+        daily_time_weighted_returns(
             log_returns=log_returns_instances,
             decay_parameter=decay_parameter
         ),

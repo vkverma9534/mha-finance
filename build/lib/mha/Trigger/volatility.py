@@ -11,7 +11,7 @@ def volatility_trigger(
     horizon: str,
     lookback: float | None = None,
     decay_parameter: float | None = None,
-    window_length: int | None = None,
+    window_length: float | None = None,
     diagnostics: bool = False
 )-> dict:
     if horizon[0].lower() == "m":

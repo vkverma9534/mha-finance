@@ -1,0 +1,16 @@
+numpy>=1.23
+pandas>=1.5
+scipy>=1.9
+scikit-learn>=1.2
+yfinance>=0.2
+plotly>=5.15
+
+[dev]
+pytest
+black
+ruff
+build
+twine
+
+[test]
+pytest>=7.0

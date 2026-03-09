@@ -1,8 +1,4 @@
 import numpy as np
-import math
-from typing import List
-import pandas as pd
-from datetime import datetime, timezone, timedelta
 from mha.volatility.base_v import volatility_estimation,time_weighted_volatility
 from mha.returns.base import fetch_separation_time,realized_price_proxy_at,Calculate_log_returns_at_an_instance
 from mha.evaluation.stability import  volatility_uncertainty_dispersion,relative_volatility_change
@@ -12,15 +8,14 @@ from mha.data.fetch import get_my_data
 
 def find_annually_stability(symbol: str,
                            decay_parameter: float | None = None, 
-                           lookback: float | None = None, 
-                           window_length: int | None = None) -> dict:
+                           lookback: int | None = None, 
+                           window_length: int | None = None) -> dict[str, object]:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
-    if lookback is None:
-        lookback=15
+    lookback = 15 if lookback is None else lookback
 
     if decay_parameter is not None and not (0 < decay_parameter < 1):
         raise ValueError("decay_parameter must be in (0, 1)")
@@ -47,20 +42,18 @@ def find_annually_stability(symbol: str,
     if len(time_instances) < 2:
         raise ValueError("Insufficient data to compute returns")
 
-    price_instances = [None] * len(time_instances)
-    log_returns_instances = [None] * (len(time_instances) - 1)
+    price_instances = [
+        realized_price_proxy_at(time=t, df=year_data_fetch)
+        for t in time_instances
+    ]
 
-    for i in range(len(time_instances)):
-        price_instances[i] = realized_price_proxy_at(
-            time=time_instances[i],
-            df=year_data_fetch
-        )
-
-    for i in range(len(time_instances) - 1):
-        log_returns_instances[i] = Calculate_log_returns_at_an_instance(
+    log_returns_instances = [
+        Calculate_log_returns_at_an_instance(
             current_Price=price_instances[i+1],
             last_horizon_price=price_instances[i]
         )
+        for i in range(len(time_instances) - 1)
+    ]
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
 
