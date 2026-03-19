@@ -11,7 +11,7 @@ from mha.evaluation.stability import temporal_smoothness_curve
 
 def flag_monthly_regime(symbol: str,
                         window_length: int | None = None,
-                        lookback: float|None = None) -> dict:
+                        lookback: int|None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
@@ -104,7 +104,7 @@ def flag_monthly_regime(symbol: str,
 
 def flag_weekly_regime(symbol: str,
                         window_length: int | None = None,
-                        lookback: float|None = None) -> dict:
+                        lookback: int|None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
@@ -197,14 +197,14 @@ def flag_weekly_regime(symbol: str,
 
 def flag_daily_regime(symbol: str,
                         window_length: int | None = None,
-                        lookback: float|None = None) -> dict:
+                        lookback: int|None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
     #      - Incomplete current-day records are removed.
     #      - Data is sorted chronologically.
     if lookback is None:
-        lookback=70/365
+        lookback=70//365
     
 
     day_data_fetch = get_my_data(days=365 * lookback, symbol=symbol)
@@ -290,7 +290,7 @@ def flag_daily_regime(symbol: str,
 
 def flag_annually_regime(symbol: str,
                         window_length: int | None = None,
-                        lookback: float|None = None) -> dict:
+                        lookback: int|None = None) -> dict:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned

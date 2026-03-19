@@ -9,7 +9,7 @@ from mha.volatility.annually_v import find_annually_stability
 def volatility_trigger(
     symbol: str,
     horizon: str,
-    lookback: float | None = None,
+    lookback: int | None = None,
     decay_parameter: float | None = None,
     window_length: int | None = None,
     diagnostics: bool = False

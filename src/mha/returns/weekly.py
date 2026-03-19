@@ -6,6 +6,12 @@ from typing import List
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 from mha.data.fetch import get_my_data
+from mha.returns.base import (fetch_separation_time, 
+                              realized_price_proxy_at,
+                              Calculate_log_returns_at_an_instance,
+                              calculating_mean_horizon_return,
+                              median_return,
+                              dispersion)
 
 def weekly_time_weighted_returns(
     log_returns: np.ndarray,
@@ -27,7 +33,7 @@ def weekly_time_weighted_returns(
 
     return float(np.dot(weights, r))
 
-def find_weekly_estimations(symbol: str, decay_parameter: float| None = None, lookback: float | None = None) -> np.ndarray:
+def find_weekly_estimations(symbol: str, decay_parameter: float| None = None, lookback: int | None = None) -> np.ndarray:
     #  Step 1-- Data Ingestion
 
     #    Data Based on horizon is loaded and cleaned
