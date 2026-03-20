@@ -8,7 +8,7 @@ from mha.regimes.detection import (
 def volatility_trigger(
     symbol: str,
     horizon: str,
-    lookback: float | None = None,
+    lookback: int | None = None,
     window_length: int | None = None,
 )-> dict:
     if horizon[0].lower() == "m":

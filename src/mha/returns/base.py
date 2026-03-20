@@ -8,10 +8,27 @@ def realized_price_proxy_at(
     time: pd.Timestamp,
     df: pd.DataFrame
 ) -> float:
+    if not isinstance(time, pd.Timestamp):
+        time = pd.to_datetime(time)
+
+    if not isinstance(df.index, pd.DatetimeIndex):
+        df = df.copy()
+        df.index = pd.to_datetime(df.index)
+
     try:
-        prices = df.loc[time, ["open", "high", "low", "close"]].values
+        row = df.loc[time]
     except KeyError:
         raise ValueError(f"No data found for timestamp {time}")
+
+    if isinstance(row, pd.DataFrame):
+        row = row.iloc[0]
+
+    required_cols = ["open", "high", "low", "close"]
+
+    if not all(col in row.index for col in required_cols):
+        raise ValueError(f"Missing OHLC columns at {time}")
+
+    prices = row[required_cols].to_numpy(dtype=float)
 
     if not np.isfinite(prices).all():
         raise ValueError(f"Invalid OHLC values at {time}")
@@ -19,7 +36,7 @@ def realized_price_proxy_at(
     if (prices <= 0).any():
         raise ValueError(f"Non-positive OHLC values at {time}")
 
-    return float(prices.mean())
+    return float(np.mean(prices))
 
 def fetch_separation_time(
     horizon: int,
@@ -56,11 +73,11 @@ def Calculate_log_returns_at_an_instance(
 #     Represents the empirical dispersion of monthly returns
 #          (not volatility modeling)
 
-def calculating_mean_horizon_return(log_returns: np.ndarray) -> float:
-    return log_returns.mean()
+def calculating_mean_horizon_return(log_returns) -> float:
+    return np.mean(log_returns)
 
-def median_return(log_returns: np.ndarray) -> float:
+def median_return(log_returns) -> float:
     return np.median(log_returns)
 
-def dispersion(log_returns: np.ndarray) -> float:
-    return np.var(log_returns, ddof=1)
+def dispersion(log_returns) -> float:
+    return float(np.var(log_returns, ddof=1))

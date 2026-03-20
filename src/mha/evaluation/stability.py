@@ -13,7 +13,7 @@ def volatility_uncertainty_dispersion(log_returns: np.ndarray, w_min: int = 2) -
         std_dev.append(volatility_estimation(log_returns[-w:]))
 
     std_dev = np.asarray(std_dev, dtype=float)
-    return np.var(std_dev, ddof=1)
+    return float(np.var(std_dev, ddof=1))
 
 def relative_volatility_change(log_returns: np.ndarray) -> float:
     if log_returns.size < 2:

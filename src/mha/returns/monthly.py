@@ -59,20 +59,24 @@ def find_monthly_estimations(symbol: str, decay_parameter: float| None = None, l
     time_instances = fetch_separation_time(horizon=horizon, df=month_data_fetch)
     time_instances = sorted(time_instances)
 
-    price_instances = [None] * len(time_instances)
-    log_returns_instances = [None] * (len(time_instances) - 1)
+    price_instances = [
+        realized_price_proxy_at(time=t, df=month_data_fetch)
+        for t in time_instances
+    ]
 
-    for i in range(len(time_instances)):
-        price_instances[i] = realized_price_proxy_at(
-            time=time_instances[i],
-            df=month_data_fetch
-        )
+    log_returns_instances = []
+    for i in range(len(price_instances) - 1):
+        p0, p1 = price_instances[i], price_instances[i+1]
 
-    for i in range(len(time_instances) - 1):
-        log_returns_instances[i] = Calculate_log_returns_at_an_instance(
-            current_Price=price_instances[i+1],
-            last_horizon_price=price_instances[i]
-        )
+        if p0 is not None and p1 is not None:
+            value = Calculate_log_returns_at_an_instance(
+                current_Price=p1,
+                last_horizon_price=p0
+            )
+        else:
+            value = None 
+
+        log_returns_instances.append(value)
 
     log_returns_instances = np.asarray(log_returns_instances, dtype=float)
 

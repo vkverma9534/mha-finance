@@ -5,7 +5,7 @@ from mha.returns.annually import find_annaul_estimations
 
 def returns_trigger(symbol: str,
                     horizon: str,
-                    lookback:float|None=None,
+                    lookback:int|None=None,
                     decay_parameter:float|None=None)-> dict:
     if horizon[0].lower() == "m":
         deliverables=find_monthly_estimations(symbol=symbol,
