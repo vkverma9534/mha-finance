@@ -18,7 +18,6 @@ def Abruptness_detector(temporal_smoothness_curve: np.ndarray) -> np.ndarray:
 
     return np.diff(temporal_smoothness_curve) / std
 
-
 def diagnostics(log_returns: np.ndarray, window_length: int | None = None) -> go.Figure:
     if window_length is None:
         window_length = len(log_returns) // 6
@@ -46,9 +45,6 @@ class AbruptnessDetector:
     def __init__(self, threshold_normal: float = 1.0, threshold_moderate: float = 2.0):
         self.threshold_normal = threshold_normal
         self.threshold_moderate = threshold_moderate
-
-    def compute(self, curve: np.ndarray) -> np.ndarray:
-        return Abruptness_detector(curve)
 
     def classify(self, abruptness: np.ndarray) -> dict[str, np.ndarray]:
         a = np.abs(abruptness)
