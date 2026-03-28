@@ -355,22 +355,4 @@ Planned and possible future directions include:
 
 ---
 
-## Contributing
 
-Contributions, suggestions, and issue reports are welcome.
-
-If you’d like to improve the package or extend its analytical capabilities, feel free to open an issue or submit a pull request.
-
----
-
-## License
-
-Add your license here.
-
-Example:
-
-```text
-MIT License
-```
-
----
