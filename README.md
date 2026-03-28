@@ -26,29 +26,6 @@ Instead of forecasting prices or generating trading signals, `mha-finance` provi
 
 ---
 
-## Design Philosophy
-
-`mha-finance` is built around a simple idea:
-
-> Financial behavior changes across time horizons, and each horizon should be studied statistically on its own terms.
-
-This package is designed for:
-
-- statistical exploration
-- reproducible financial analysis
-- academic / educational use
-- horizon-aware market characterization
-
-This package is **not** intended for:
-
-- price prediction
-- market timing
-- trading signals
-- portfolio optimization
-- investment advice
-
----
-
 ## Installation
 
 Install directly from PyPI:
@@ -214,6 +191,29 @@ plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
 ```
+
+---
+
+## Design Philosophy
+
+`mha-finance` is built around a simple idea:
+
+> Financial behavior changes across time horizons, and each horizon should be studied statistically on its own terms.
+
+This package is designed for:
+
+- statistical exploration
+- reproducible financial analysis
+- academic / educational use
+- horizon-aware market characterization
+
+This package is **not** intended for:
+
+- price prediction
+- market timing
+- trading signals
+- portfolio optimization
+- investment advice
 
 ---
 
