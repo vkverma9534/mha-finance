@@ -54,7 +54,7 @@ This package is **not** intended for:
 Install directly from PyPI:
 
 ```bash
-pip install mha-finance==0.14.9
+pip install mha-finance
 ```
 
 ---
