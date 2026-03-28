@@ -5,7 +5,7 @@ from mha.regimes.detection import (
     flag_daily_regime
 )
 
-def volatility_trigger(
+def regime_trigger(
     symbol: str,
     horizon: str,
     lookback: int | None = None,
