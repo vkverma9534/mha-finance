@@ -4,9 +4,8 @@ from typing import List
 import pandas as pd
 from datetime import datetime, timezone, timedelta
 
-def volatility_estimation(
-    log_returns_instances:np.ndarray)-> float:
-    return np.sqrt(np.var(log_returns_instances))
+def volatility_estimation(log_returns_instances: np.ndarray) -> float:
+    return float(np.std(log_returns_instances, ddof=1))
 
 def time_weighted_volatility(
     horizon: str,
