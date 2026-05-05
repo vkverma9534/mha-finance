@@ -18,12 +18,16 @@ def volatility_uncertainty_dispersion(log_returns: np.ndarray, w_min: int = 2) -
     return float(np.var(vols, ddof=1))
 
 def relative_volatility_change(log_returns: np.ndarray) -> float:
-    if log_returns.size < 2:
+    n = log_returns.size
+    if n < 2:
         raise ValueError("log_returns must contain at least two elements")
+
     vol_full = float(volatility_estimation(log_returns))
-    vol_truncated = float(volatility_estimation(log_returns[:-1]))
     if vol_full == 0.0:
         raise ZeroDivisionError("Volatility estimation returned zero")
+
+    vol_truncated = float(volatility_estimation(log_returns[:-1]))
+
     return (vol_full - vol_truncated) / vol_full
 
 def temporal_smoothness_curve(
