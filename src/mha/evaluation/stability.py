@@ -6,14 +6,16 @@ from datetime import datetime, timezone, timedelta
 from mha.volatility.base_v import volatility_estimation
 
 def volatility_uncertainty_dispersion(log_returns: np.ndarray, w_min: int = 2) -> float:
-    n = len(log_returns)
-    std_dev = []
+    n = log_returns.size
+    if n < w_min:
+        raise ValueError("log_returns length must be >= w_min")
 
-    for w in range(w_min, n + 1):
-        std_dev.append(volatility_estimation(log_returns[-w:]))
+    vols = np.empty(n - w_min + 1)
 
-    std_dev = np.asarray(std_dev, dtype=float)
-    return float(np.var(std_dev, ddof=1))
+    for i, w in enumerate(range(w_min, n + 1)):
+        vols[i] = volatility_estimation(log_returns[-w:])
+
+    return float(np.var(vols, ddof=1))
 
 def relative_volatility_change(log_returns: np.ndarray) -> float:
     if log_returns.size < 2:
