@@ -1,10 +1,6 @@
 #annually.py
 
 import numpy as np
-import math
-from typing import List
-import pandas as pd
-from datetime import datetime, timezone, timedelta
 from mha.data.fetch import get_my_data
 from mha.returns.base import (
     fetch_separation_time,
