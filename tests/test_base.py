@@ -131,3 +131,11 @@ def test_dispersion_sample_variance():
     data = np.array([1.0, 2.0, 3.0])
     # sample variance with ddof=1 → 1.0
     assert dispersion(data) == pytest.approx(1.0)
+
+
+def test_calculate_log_returns_non_positive_prices():
+    with pytest.raises(ValueError, match="Prices must be positive"):
+        Calculate_log_returns_at_an_instance(100, 0)
+
+    with pytest.raises(ValueError, match="Prices must be positive"):
+        Calculate_log_returns_at_an_instance(-100, 50)
