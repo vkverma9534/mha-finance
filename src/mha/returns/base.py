@@ -80,4 +80,6 @@ def median_return(log_returns) -> float:
     return np.median(log_returns)
 
 def dispersion(log_returns) -> float:
+    if len(log_returns) < 2:
+        return 0.0
     return float(np.var(log_returns, ddof=1))
