@@ -2,7 +2,7 @@ LICENSE
 README.md
 pyproject.toml
 src/mha/__init__.py
-src/mha/Trigger/regime_trigger.py
+src/mha/Trigger/regime.py
 src/mha/Trigger/returns.py
 src/mha/Trigger/volatility.py
 src/mha/data/fetch.py
