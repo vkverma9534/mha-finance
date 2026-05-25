@@ -194,6 +194,32 @@ plt.show()
 
 ---
 
+# 4) Ticker Search Utility (Will be released in next version):
+
+`mha-finance` now includes a lightweight ticker discovery utility for resolving company or asset names into Yahoo Finance ticker symbols.
+
+```python
+from mha.data.explore import TickerSearch
+
+results = TickerSearch("Goldman Sachs")
+
+print(results)
+```
+### Example Output
+
+```python
+[
+    {
+        "name": "Goldman Sachs Group Inc.",
+        "ticker": "GS"
+    }
+]
+```
+`TickerSearch` helps users discover valid ticker symbols by searching Yahoo Finance for matching companies or organizations. 
+It is useful for quick asset lookup, exploratory analysis, and automated financial workflows.
+
+---
+
 ## Design Philosophy
 
 `mha-finance` is built around a simple idea:
