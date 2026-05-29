@@ -5,6 +5,7 @@ src/mha/__init__.py
 src/mha/Trigger/regime.py
 src/mha/Trigger/returns.py
 src/mha/Trigger/volatility.py
+src/mha/data/explore.py
 src/mha/data/fetch.py
 src/mha/evaluation/__init__.py
 src/mha/evaluation/diagnostic.py

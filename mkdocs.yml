@@ -1,0 +1,12 @@
+site_name: MHA Finance
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - Methodology: methodology.md

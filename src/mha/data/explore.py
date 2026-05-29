@@ -19,4 +19,4 @@ def TickerSearch(name: str):
         }
         for x in r.get("quotes", [])
         if x.get("symbol")
-    ]
+    ]=

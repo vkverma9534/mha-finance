@@ -48,3 +48,9 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[dependency-groups]
+docs = [
+    "mkdocs-material>=9.7.6",
+    "mkdocstrings[python]>=0.30.1",
+]
