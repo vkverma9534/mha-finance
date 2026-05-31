@@ -431,17 +431,6 @@ mha-finance is a free Python framework for Multi-Horizon Statistical Modeling of
   *All outputs are descriptive statistical summaries or aggregated analytical results.*
   *The framework does not expose or reconstruct raw historical price series.*
 
-#### 3. Use of Derived Insights
-  *mha-finance operates exclusively on derived statistical quantities, including:*
-    
-  - horizon-specific log returns
-  - rolling statistical moments (mean, variance)
-  - volatility estimators
-  - regime descriptors
-
-  *All outputs are descriptive statistical summaries or aggregated analytical results.*
-  *The framework does not expose or reconstruct raw historical price series.*
-
 #### 4. Responsibility and Compliance
   *By running mha-finance, users fetch market data directly from Yahoo Finance and are responsible for ensuring their usage complies with the data provider’s terms.*
   
