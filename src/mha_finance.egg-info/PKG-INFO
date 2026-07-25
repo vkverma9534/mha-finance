@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mha-finance
-Version: 0.14.9
+Version: 0.15.0
 Summary: Multi-Horizon Statistical Modeling for Financial Time Series
 Author: Vikram Verma
 License: MIT
@@ -224,7 +224,7 @@ plt.show()
 
 ---
 
-# 4) Ticker Search Utility (Will be released in next version):
+# 4) Ticker Search Utility (Available for use in the newest version-(0.14.9)):
 
 `mha-finance` now includes a lightweight ticker discovery utility for resolving company or asset names into Yahoo Finance ticker symbols.
 

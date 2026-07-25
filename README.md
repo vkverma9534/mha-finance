@@ -196,7 +196,7 @@ plt.show()
 
 ---
 
-# 4) Ticker Search Utility (Available for use in the newest version-(0.14.9)):
+# 4) Ticker Search Utility (Available for use in the newest version-(0.15.0)):
 
 `mha-finance` now includes a lightweight ticker discovery utility for resolving company or asset names into Yahoo Finance ticker symbols.
 
