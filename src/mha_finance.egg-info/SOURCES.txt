@@ -10,6 +10,7 @@ src/mha/data/fetch.py
 src/mha/evaluation/__init__.py
 src/mha/evaluation/diagnostic.py
 src/mha/evaluation/stability.py
+src/mha/npv/dcf.py
 src/mha/regimes/detection.py
 src/mha/returns/annually.py
 src/mha/returns/base.py
